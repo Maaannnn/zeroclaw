@@ -957,6 +957,12 @@ fn default_model_for_provider(provider: &str) -> String {
     if provider == "qwen-coding-plan" {
         return "qwen3-coder-plus".into();
     }
+    if provider == "byteplus-coding-plan" || provider == "volcengine-coding-plan" {
+        return "ark-code-latest".into();
+    }
+    if provider == "byteplus" {
+        return "seed-2-0-mini-260215".into();
+    }
 
     match canonical_provider_name(provider) {
         "anthropic" => "claude-sonnet-4-5-20250929".into(),
@@ -993,6 +999,69 @@ fn default_model_for_provider(provider: &str) -> String {
 }
 
 fn curated_models_for_provider(provider_name: &str) -> Vec<(String, String)> {
+    if provider_name == "byteplus-coding-plan" {
+        return vec![
+            (
+                "ark-code-latest".to_string(),
+                "ARK Code Latest (default coding model)".to_string(),
+            ),
+            (
+                "bytedance-seed-code".to_string(),
+                "ByteDance Seed Code".to_string(),
+            ),
+            ("glm-4.7".to_string(), "GLM 4.7 (200K context)".to_string()),
+            (
+                "kimi-k2-thinking".to_string(),
+                "Kimi K2 Thinking (256K context)".to_string(),
+            ),
+            (
+                "kimi-k2.5".to_string(),
+                "Kimi K2.5 (256K context)".to_string(),
+            ),
+        ];
+    }
+    if provider_name == "byteplus" {
+        return vec![
+            (
+                "seed-2-0-mini-260215".to_string(),
+                "Seed 2.0 Mini (default)".to_string(),
+            ),
+            (
+                "kimi-k2-5-260127".to_string(),
+                "Kimi K2.5".to_string(),
+            ),
+            (
+                "glm-4-7-251222".to_string(),
+                "GLM 4.7".to_string(),
+            ),
+        ];
+    }
+    if provider_name == "volcengine-coding-plan" {
+        return vec![
+            (
+                "ark-code-latest".to_string(),
+                "ARK Code Latest (default coding model)".to_string(),
+            ),
+            (
+                "doubao-seed-2.0-code".to_string(),
+                "Doubao Seed 2.0 Code".to_string(),
+            ),
+            (
+                "doubao-seed-code".to_string(),
+                "Doubao Seed Code".to_string(),
+            ),
+            ("glm-4.7".to_string(), "GLM 4.7".to_string()),
+            (
+                "deepseek-v3.2".to_string(),
+                "DeepSeek V3.2".to_string(),
+            ),
+            (
+                "kimi-k2-thinking".to_string(),
+                "Kimi K2 Thinking".to_string(),
+            ),
+            ("kimi-k2.5".to_string(), "Kimi K2.5".to_string()),
+        ];
+    }
     if provider_name == "qwen-coding-plan" {
         return vec![
             (
@@ -1531,13 +1600,6 @@ fn models_endpoint_for_provider(provider_name: &str) -> Option<&'static str> {
         "moonshot-cn" | "kimi-cn" => Some("https://api.moonshot.cn/v1/models"),
         "glm-cn" | "bigmodel" => Some("https://open.bigmodel.cn/api/paas/v4/models"),
         "zai-cn" | "z.ai-cn" => Some("https://open.bigmodel.cn/api/coding/paas/v4/models"),
-        "byteplus-coding-plan" | "byteplus_coding_plan" => {
-            Some("https://ark.ap-southeast.bytepluses.com/api/coding/v3/models")
-        }
-        "byteplus" => Some("https://ark.ap-southeast.bytepluses.com/api/v3/models"),
-        "volcengine-coding-plan" | "volcengine_coding_plan" => {
-            Some("https://ark.cn-beijing.volces.com/api/coding/v3/models")
-        }
         "volcengine" | "ark" | "doubao" | "doubao-cn" => {
             Some("https://ark.cn-beijing.volces.com/api/v3/models")
         }
@@ -2558,7 +2620,16 @@ async fn setup_provider(workspace_dir: &Path) -> Result<(String, String, String,
             ("qwen-us", "Qwen — DashScope US endpoint"),
             ("hunyuan", "Hunyuan — Tencent large models (T1, Turbo, Pro)"),
             ("qianfan", "Qianfan — Baidu AI models (China endpoint)"),
-            ("volcengine", "Volcengine ARK — Doubao model family"),
+            (
+                "byteplus-coding-plan",
+                "BytePlus Coding Plan — ARK coding endpoint (international endpoint)",
+            ),
+            ("byteplus", "BytePlus — ARK general endpoint (international endpoint)"),
+            (
+                "volcengine-coding-plan",
+                "VolcEngine Coding Plan — ARK coding endpoint (China endpoint)",
+            ),
+            ("volcengine", "VolcEngine ARK — Doubao model family (China endpoint)"),
             (
                 "siliconflow",
                 "SiliconFlow — OpenAI-compatible hosted models",
@@ -3276,6 +3347,8 @@ fn provider_env_var(name: &str) -> &'static str {
         "minimax" => "MINIMAX_API_KEY",
         "qwen" => "DASHSCOPE_API_KEY",
         "volcengine" => "ARK_API_KEY",
+        "byteplus-coding-plan" | "byteplus" => "BYTEPLUS_API_KEY",
+        "volcengine-coding-plan" => "VOLCENGINE_API_KEY",
         "siliconflow" => "SILICONFLOW_API_KEY",
         "hunyuan" => "HUNYUAN_API_KEY",
         "qianfan" => "QIANFAN_API_KEY",
@@ -3297,7 +3370,8 @@ fn provider_env_var_fallbacks(name: &str) -> &'static [&'static str] {
         "anthropic" => &["ANTHROPIC_OAUTH_TOKEN"],
         "gemini" => &["GOOGLE_API_KEY"],
         "minimax" => &["MINIMAX_OAUTH_TOKEN"],
-        "volcengine" => &["DOUBAO_API_KEY"],
+        "volcengine" => &["DOUBAO_API_KEY", "VOLCENGINE_API_KEY"],
+        "volcengine-coding-plan" => &["ARK_API_KEY"],
         "stepfun" => &["STEPFUN_API_KEY"],
         "kimi-code" => &["MOONSHOT_API_KEY"],
         _ => &[],
