@@ -1531,6 +1531,13 @@ fn models_endpoint_for_provider(provider_name: &str) -> Option<&'static str> {
         "moonshot-cn" | "kimi-cn" => Some("https://api.moonshot.cn/v1/models"),
         "glm-cn" | "bigmodel" => Some("https://open.bigmodel.cn/api/paas/v4/models"),
         "zai-cn" | "z.ai-cn" => Some("https://open.bigmodel.cn/api/coding/paas/v4/models"),
+        "byteplus-coding-plan" | "byteplus_coding_plan" => {
+            Some("https://ark.ap-southeast.bytepluses.com/api/coding/v3/models")
+        }
+        "byteplus" => Some("https://ark.ap-southeast.bytepluses.com/api/v3/models"),
+        "volcengine-coding-plan" | "volcengine_coding_plan" => {
+            Some("https://ark.cn-beijing.volces.com/api/coding/v3/models")
+        }
         "volcengine" | "ark" | "doubao" | "doubao-cn" => {
             Some("https://ark.cn-beijing.volces.com/api/v3/models")
         }
