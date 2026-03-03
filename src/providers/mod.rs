@@ -212,6 +212,18 @@ pub(crate) fn is_doubao_alias(name: &str) -> bool {
     matches!(name, "doubao" | "volcengine" | "ark" | "doubao-cn")
 }
 
+pub(crate) fn is_byteplus_coding_plan_alias(name: &str) -> bool {
+    matches!(name, "byteplus-coding-plan" | "byteplus_coding_plan")
+}
+
+pub(crate) fn is_byteplus_alias(name: &str) -> bool {
+    matches!(name, "byteplus")
+}
+
+pub(crate) fn is_volcengine_coding_plan_alias(name: &str) -> bool {
+    matches!(name, "volcengine-coding-plan" | "volcengine_coding_plan")
+}
+
 pub(crate) fn is_siliconflow_alias(name: &str) -> bool {
     matches!(name, "siliconflow" | "silicon-cloud" | "siliconcloud")
 }
@@ -977,7 +989,12 @@ fn resolve_provider_credential(name: &str, credential_override: Option<&str>) ->
         "bedrock" | "aws-bedrock" => return None,
         "hunyuan" | "tencent" => vec!["HUNYUAN_API_KEY"],
         name if is_qianfan_alias(name) => vec!["QIANFAN_API_KEY"],
-        name if is_doubao_alias(name) => vec!["ARK_API_KEY", "DOUBAO_API_KEY"],
+        name if is_doubao_alias(name) => {
+            vec!["ARK_API_KEY", "DOUBAO_API_KEY", "VOLCENGINE_API_KEY"]
+        }
+        name if is_byteplus_coding_plan_alias(name) => vec!["BYTEPLUS_API_KEY"],
+        name if is_byteplus_alias(name) => vec!["BYTEPLUS_API_KEY"],
+        name if is_volcengine_coding_plan_alias(name) => vec!["VOLCENGINE_API_KEY", "ARK_API_KEY"],
         name if is_siliconflow_alias(name) => vec!["SILICONFLOW_API_KEY"],
         name if is_qwen_alias(name) => vec!["DASHSCOPE_API_KEY"],
         name if is_zai_alias(name) => vec!["ZAI_API_KEY"],
@@ -1304,6 +1321,26 @@ fn create_provider_with_url_and_options(
             key,
             AuthStyle::Bearer,
         ))),
+        name if is_byteplus_coding_plan_alias(name) => Ok(Box::new(OpenAiCompatibleProvider::new(
+            "BytePlus Coding Plan",
+            "https://ark.ap-southeast.bytepluses.com/api/coding/v3",
+            key,
+            AuthStyle::Bearer,
+        ))),
+        name if is_byteplus_alias(name) => Ok(Box::new(OpenAiCompatibleProvider::new(
+            "BytePlus",
+            "https://ark.ap-southeast.bytepluses.com/api/v3",
+            key,
+            AuthStyle::Bearer,
+        ))),
+        name if is_volcengine_coding_plan_alias(name) => {
+            Ok(Box::new(OpenAiCompatibleProvider::new(
+                "VolcEngine Coding Plan",
+                "https://ark.cn-beijing.volces.com/api/coding/v3",
+                key,
+                AuthStyle::Bearer,
+            )))
+        }
         name if is_siliconflow_alias(name) => {
             Ok(Box::new(OpenAiCompatibleProvider::new_with_vision(
                 "SiliconFlow",
@@ -1823,6 +1860,30 @@ pub fn list_providers() -> Vec<ProviderInfo> {
         ProviderInfo {
             name: "anthropic",
             display_name: "Anthropic",
+            aliases: &[],
+            local: false,
+        },
+        ProviderInfo {
+            name: "byteplus-coding-plan",
+            display_name: "BytePlus Coding Plan",
+            aliases: &["byteplus_coding_plan"],
+            local: false,
+        },
+        ProviderInfo {
+            name: "byteplus",
+            display_name: "BytePlus",
+            aliases: &[],
+            local: false,
+        },
+        ProviderInfo {
+            name: "volcengine-coding-plan",
+            display_name: "VolcEngine Coding Plan",
+            aliases: &["volcengine_coding_plan"],
+            local: false,
+        },
+        ProviderInfo {
+            name: "volcengine",
+            display_name: "VolcEngine",
             aliases: &[],
             local: false,
         },

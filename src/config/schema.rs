@@ -55,6 +55,12 @@ pub fn default_model_fallback_for_provider(provider_name: Option<&str>) -> &'sta
     if normalized_provider == "qwen-coding-plan" {
         return "qwen3-coder-plus";
     }
+    if normalized_provider == "byteplus-coding-plan" {
+        return "ark-code-latest";
+    }
+    if normalized_provider == "volcengine-coding-plan" {
+        return "ark-code-latest";
+    }
 
     let canonical_provider = if is_qwen_oauth_alias(&normalized_provider) {
         "qwen-code".to_string()
@@ -82,7 +88,8 @@ pub fn default_model_fallback_for_provider(provider_name: Option<&str>) -> &'sta
         "glm" | "zai" => "glm-5",
         "minimax" => "MiniMax-M2.5",
         "qwen" => "qwen-plus",
-        "volcengine" => "doubao-1-5-pro-32k-250115",
+        "byteplus" => "seed-2-0-mini-260215",
+        "volcengine" => "doubao-seed-2-0-pro-260215",
         "siliconflow" => "Pro/zai-org/GLM-4.7",
         "qwen-code" => "qwen3-coder-plus",
         "ollama" => "llama3.2",
