@@ -106,7 +106,24 @@ jobs:
                   } >> "$GITHUB_STEP_SUMMARY"
 
             - name: Checkout
-              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+            - name: Install gh CLI
+              shell: bash
+              run: |
+                  if command -v gh &>/dev/null; then
+                    echo "gh already available: $(gh --version | head -1)"
+                    exit 0
+                  fi
+                  echo "Installing gh CLI..."
+                  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+                    | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+                  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+                    | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+                  sudo apt-get update -qq
+                  sudo apt-get install -y gh
+              env:
+                  GH_TOKEN: ${{ github.token }}
 
             - name: Validate release trigger and authorization guard
               shell: bash
@@ -127,6 +144,8 @@ jobs:
                     --output-json artifacts/release-trigger-guard.json \
                     --output-md artifacts/release-trigger-guard.md \
                     --fail-on-violation
+              env:
+                  GH_TOKEN: ${{ github.token }}
 
             - name: Emit release trigger audit event
               if: always()
@@ -233,21 +252,21 @@ jobs:
                       linker_env: ""
                       linker: ""
                       use_cross: true
-                    - os: [self-hosted, Linux, X64, aws-india, blacksmith-2vcpu-ubuntu-2404, hetzner]
+                    - os: macos-15-intel
                       target: x86_64-apple-darwin
                       artifact: zeroclaw
                       archive_ext: tar.gz
                       cross_compiler: ""
                       linker_env: ""
                       linker: ""
-                    - os: [self-hosted, Linux, X64, aws-india, blacksmith-2vcpu-ubuntu-2404, hetzner]
+                    - os: macos-14
                       target: aarch64-apple-darwin
                       artifact: zeroclaw
                       archive_ext: tar.gz
                       cross_compiler: ""
                       linker_env: ""
                       linker: ""
-                    - os: [self-hosted, Linux, X64, aws-india, blacksmith-2vcpu-ubuntu-2404, hetzner]
+                    - os: windows-latest
                       target: x86_64-pc-windows-msvc
                       artifact: zeroclaw.exe
                       archive_ext: zip
@@ -278,6 +297,14 @@ jobs:
               run: |
                   sudo apt-get update -qq
                   sudo apt-get install -y "${{ matrix.cross_compiler }}"
+                  # Install matching libc dev headers for cross targets
+                  # (required by ring/aws-lc-sys C compilation)
+                  case "${{ matrix.target }}" in
+                    armv7-unknown-linux-gnueabihf)
+                      sudo apt-get install -y libc6-dev-armhf-cross ;;
+                    aarch64-unknown-linux-gnu)
+                      sudo apt-get install -y libc6-dev-arm64-cross ;;
+                  esac
 
             - name: Setup Android NDK
               if: matrix.android_ndk
