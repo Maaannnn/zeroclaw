@@ -122,20 +122,20 @@ credential is not reused for fallback providers.
 - Chat endpoint: `/chat/completions`
 - Model discovery endpoint: `/models`
 - Authentication: `ARK_API_KEY` (fallback: `DOUBAO_API_KEY`)
-- Default model preset: `doubao-1-5-pro-32k-250115`
+- Default model preset: `doubao-seed-2-0-pro-260215`
 
 Minimal setup example:
 
 ```bash
 export ARK_API_KEY="your-ark-api-key"
-zeroclaw onboard --provider volcengine --api-key "$ARK_API_KEY" --model doubao-1-5-pro-32k-250115 --force
+zeroclaw onboard --provider volcengine --api-key "$ARK_API_KEY" --model doubao-seed-2-0-pro-260215 --force
 ```
 
 Quick validation:
 
 ```bash
 zeroclaw models refresh --provider volcengine
-zeroclaw agent --provider volcengine --model doubao-1-5-pro-32k-250115 -m "ping"
+zeroclaw agent --provider volcengine --model doubao-seed-2-0-pro-260215 -m "ping"
 ```
 
 ### StepFun Notes

@@ -984,7 +984,7 @@ fn default_model_for_provider(provider: &str) -> String {
         "glm" | "zai" => "glm-5".into(),
         "minimax" => "MiniMax-M2.5".into(),
         "qwen" => "qwen-plus".into(),
-        "volcengine" => "doubao-1-5-pro-32k-250115".into(),
+        "volcengine" => "doubao-seed-2-0-pro-260215".into(),
         "siliconflow" => "Pro/zai-org/GLM-4.7".into(),
         "qwen-code" => "qwen3-coder-plus".into(),
         "ollama" => "llama3.2".into(),
@@ -1386,8 +1386,8 @@ fn curated_models_for_provider(provider_name: &str) -> Vec<(String, String)> {
         ],
         "volcengine" => vec![
             (
-                "doubao-1-5-pro-32k-250115".to_string(),
-                "Doubao 1.5 Pro 32K (official sample model)".to_string(),
+                "doubao-seed-2-0-pro-260215".to_string(),
+                "Doubao Seed 2.0 Pro (default recommended model)".to_string(),
             ),
             (
                 "doubao-seed-1-6-250615".to_string(),
@@ -7966,7 +7966,7 @@ mod tests {
         );
         assert_eq!(
             default_model_for_provider("volcengine"),
-            "doubao-1-5-pro-32k-250115"
+            "doubao-seed-2-0-pro-260215"
         );
         assert_eq!(
             default_model_for_provider("nvidia"),
@@ -8175,7 +8175,7 @@ mod tests {
             .into_iter()
             .map(|(id, _)| id)
             .collect();
-        assert!(volcengine_ids.contains(&"doubao-1-5-pro-32k-250115".to_string()));
+        assert!(volcengine_ids.contains(&"doubao-seed-2-0-pro-260215".to_string()));
         assert!(volcengine_ids.contains(&"doubao-seed-1-6-250615".to_string()));
 
         let siliconflow_ids: Vec<String> = curated_models_for_provider("siliconflow")

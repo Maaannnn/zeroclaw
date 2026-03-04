@@ -72,20 +72,20 @@ Với chuỗi provider dự phòng (`reliability.fallback_providers`), mỗi pro
 - Chat endpoint: `/chat/completions`
 - Model discovery endpoint: `/models`
 - Xác thực: `ARK_API_KEY` (fallback: `DOUBAO_API_KEY`)
-- Model mặc định: `doubao-1-5-pro-32k-250115`
+- Model mặc định: `doubao-seed-2-0-pro-260215`
 
 Ví dụ thiết lập nhanh:
 
 ```bash
 export ARK_API_KEY="your-ark-api-key"
-zeroclaw onboard --provider volcengine --api-key "$ARK_API_KEY" --model doubao-1-5-pro-32k-250115 --force
+zeroclaw onboard --provider volcengine --api-key "$ARK_API_KEY" --model doubao-seed-2-0-pro-260215 --force
 ```
 
 Kiểm tra nhanh:
 
 ```bash
 zeroclaw models refresh --provider volcengine
-zeroclaw agent --provider volcengine --model doubao-1-5-pro-32k-250115 -m "ping"
+zeroclaw agent --provider volcengine --model doubao-seed-2-0-pro-260215 -m "ping"
 ```
 
 ### Ghi chú về StepFun
