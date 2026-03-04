@@ -2536,7 +2536,7 @@ async fn setup_provider(workspace_dir: &Path) -> Result<(String, String, String,
         "⭐ Recommended (OpenRouter, Venice, Anthropic, OpenAI, Gemini, GitHub Copilot)",
         "⚡ Fast inference (Groq, Fireworks, Together AI, NVIDIA NIM)",
         "🌐 Gateway / proxy (Vercel AI, Cloudflare AI, Amazon Bedrock)",
-        "🔬 Specialized (Moonshot/Kimi, GLM/Zhipu, MiniMax, Qwen/DashScope, Qianfan, Z.AI, Synthetic, OpenCode Zen, Cohere)",
+        "🔬 Specialized (Volcano Engine, BytePlus, Moonshot/Kimi, GLM/Zhipu, MiniMax, Qwen/DashScope, Qianfan, Z.AI, Synthetic, OpenCode Zen, Cohere)",
         "🏠 Local / private (Ollama, llama.cpp server, vLLM — no API key needed)",
         "🔧 Custom — bring your own OpenAI-compatible API",
     ];
@@ -2591,6 +2591,16 @@ async fn setup_provider(workspace_dir: &Path) -> Result<(String, String, String,
         ],
         3 => vec![
             (
+                "byteplus-coding-plan",
+                "BytePlus Coding Plan — ARK coding endpoint (international endpoint)",
+            ),
+            ("byteplus", "BytePlus — ARK general endpoint (international endpoint)"),
+            (
+                "volcengine-coding-plan",
+                "VolcEngine Coding Plan — ARK coding endpoint (China endpoint)",
+            ),
+            ("volcengine", "VolcEngine ARK — Doubao model family (China endpoint)"),
+            (
                 "kimi-code",
                 "Kimi Code — coding-optimized Kimi API (KimiCLI)",
             ),
@@ -2620,16 +2630,6 @@ async fn setup_provider(workspace_dir: &Path) -> Result<(String, String, String,
             ("qwen-us", "Qwen — DashScope US endpoint"),
             ("hunyuan", "Hunyuan — Tencent large models (T1, Turbo, Pro)"),
             ("qianfan", "Qianfan — Baidu AI models (China endpoint)"),
-            (
-                "byteplus-coding-plan",
-                "BytePlus Coding Plan — ARK coding endpoint (international endpoint)",
-            ),
-            ("byteplus", "BytePlus — ARK general endpoint (international endpoint)"),
-            (
-                "volcengine-coding-plan",
-                "VolcEngine Coding Plan — ARK coding endpoint (China endpoint)",
-            ),
-            ("volcengine", "VolcEngine ARK — Doubao model family (China endpoint)"),
             (
                 "siliconflow",
                 "SiliconFlow — OpenAI-compatible hosted models",
@@ -3038,6 +3038,12 @@ async fn setup_provider(workspace_dir: &Path) -> Result<(String, String, String,
             match provider_name {
                 "openrouter" => "https://openrouter.ai/keys",
                 "openai" => "https://platform.openai.com/api-keys",
+                "byteplus-coding-plan" => {
+                    "https://www.byteplus.com/en/activity/codingplan"
+                }
+                "volcengine-coding-plan" => {
+                    "https://www.volcengine.com/activity/codingplan"
+                }
                 "venice" => "https://venice.ai/settings/api",
                 "groq" => "https://console.groq.com/keys",
                 "mistral" => "https://console.mistral.ai/api-keys",
